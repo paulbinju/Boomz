@@ -1,0 +1,336 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="lib/onsen/css/onsenui.css">
+    <link rel="stylesheet" href="styles/onsen-css-components-blue-basic-theme.css">
+    <link rel="stylesheet" href="style.css">
+     
+    <link rel="stylesheet" href="css/berry.css">
+    <link rel="stylesheet" href="css/bootstrap.css">
+
+
+
+    <script src="lib/onsen/js/angular/angular.js"></script>
+    <script src="lib/onsen/js/onsenui.js"></script>
+    <script type="text/javascript" src="js/modernizr.custom.32033.js"></script>
+    <script src="js/jquery-1.11.1.min.js"></script>
+
+
+
+
+
+    <script>
+        ons.bootstrap();
+    </script>
+
+     <script type="text/javascript">
+         $(document).ready(function () {
+             $.getJSON('http://boomzbahrain.com/json/offercount.ashx?callback=?').done(function (data) {
+                 $("#count").append(data[0].count);
+             });
+
+             $("#imgico").attr("src", 'images/ico' + querystring('secid') + '.png');
+
+
+             $.getJSON('http://www.boomzbahrain.com/json/companydetails.ashx?profileid=' + querystring('profileid') + '&callback=?', function (data) {
+                 $.each(data, function (key, value) {
+                     if (data[key].Paid == true) {
+                         $('.card').append("<img style='width:100%; height:250px;' src='http://www.boomzbahrain.com/company/" + data[key].ProfileID + "/logo" + data[key].LogoExtension + "'>");
+                             
+                     }
+                     else {
+                       //  $('.card').hide();// add dummy pic here
+                     }
+                     $('.card-name').append("" + data[key].Title + "");
+                     $('.callemail').append("<div class='right'><a href='tel:" + data[key].Phone + "'><img class='right' style='margin:5px 0 0 0; width:30px; height:30px;' src='images/phoneicon.png'></a>&nbsp;&nbsp;<a href='mailto:" + data[key].EmailID + "'><img class='right' style='margin:5px 5px 0 0; width:30px; height:30px;' src='images/mailicon.png'></a></div> ");
+                     $('#location').append("<b>Phone</b>: " + data[key].Phone + "<br /><b>Location</b>: " + data[key].Location + "<br /><b>Email</b>: <a class='listemail' href='mailto:" + data[key].EmailID + "'>" + data[key].EmailID + "</a><br> ");
+                     if (data[key].Website != null) {
+                         $('#web').attr('href', data[key].Website) 
+                     }
+                     $('#map,.mapx').on('click', function () { window.location.href = 'https://maps.google.com/maps?q=' + data[key].Location + ',+bahrain&hl=en&sll=37.424915,-122.072205&sspn=0.07975,0.169086&hnear=' + data[key].Location + ',Bahrain&t=m&z=14' });
+                     
+                     $('#telep').attr("href", "tel:" + data[key].Phone + "");
+
+                     $('#brief').append("" + data[key].ShortDesc + "");
+                     if (data[key].HomePage != null) {
+                         $('#aboutus').append("" + data[key].HomePage + "");
+                     }
+
+                     if (data[key].ProductsServices != null) {
+                         $('#products').append("" + data[key].ProductsServices + "");
+                     }
+
+                     $('#offer').attr("href", "offers.html?profileid=" + querystring('profileid'));
+
+                     $.getJSON('http://www.boomzbahrain.com/json/getpagetitle.ashx?secid=' + data[key].SecID + '&subsecid=' + data[key].SubSecID + '&callback=?').done(function (data2) {
+            
+                         var pagetitle = data2[0].title.split('/');
+                         $(".headertitle").append('' + pagetitle[1] + '');
+                     });
+
+
+                     $("#back").click(function () {
+                         window.location.href = 'section.html?secid=' + data[key].SecID + '&subsecid=' + data[key].SubSecID + '';
+                     });
+                     $('#loading').hide();
+                 });
+
+             });
+           
+
+
+         });
+
+
+
+
+
+         //
+         var reviews = "";
+
+         $.getJSON('http://www.boomzbahrain.com/json/companyreviews.ashx?coid=' + querystring('profileid') + '&callback=?', function (data) {
+             $.each(data, function (key, value) {
+
+                 reviews = ' <div class="review"> \
+                                <div class="row"> \
+                                    <div class="col-size-1"> \
+                                        <div class="review-person"> \
+                                            <img src="images/reviews.png" alt="" class="img-responsive"> \
+                                        </div> \
+                                    </div> \
+                                    <div class="col-xs-9"> \
+                                        <div class="review-comment"> \
+                                            <h3>" ' + data[key].Review + ' "</h3> \
+                                            <p>     ' + data[key].Name + '           <span> ';
+
+                 for(o=1;o<=data[key].Rating;o++){
+                     reviews +=' <i class="fa fa-star fa-lg"></i>';
+                 
+                 }
+                 for(o=1;o<=5-data[key].Rating;o++){
+                     reviews += '<i class="fa fa-star-o fa-lg"></i>';
+                 }
+
+                 reviews +=' </span> \
+                                            </p> \
+                                        </div> \
+                                    </div> \
+                                </div> \
+                            </div>';
+
+                 $("#reviewsx").append(reviews);
+
+             });
+         });
+
+
+
+         function querystring(key) {
+             var re = new RegExp('(?:\\?|&)' + key + '=(.*?)(?=&|$)', 'gi');
+             var r = [], m;
+             while ((m = re.exec(document.location.search)) != null) r.push(m[1]);
+             return r;
+         }
+
+    </script>
+
+</head>
+<body>
+
+
+    <header class="hfixed">
+        <nav class="navbar" role="navigation">
+
+
+               <form action='search.html' id="searchform">
+                <label class='sr-only' for='q'>Search</label>
+                <input id='keyword' name='keyword' placeholder='Search Here' type='search'>
+                <button id="search" type='submit'>
+                    <span class='sr-only'>Search</span>
+                </button>
+            </form>
+
+
+        </nav>
+    </header>
+    <script>
+     
+            //if (("button#search.submit").val() != '') {
+            //    window.location.href = "search.html?keyword=" + $("#keyword").val();
+            //}
+    </script>
+
+    <div class="panel panel-white left">
+        <!-- Overlay div -->
+        <!-- Animated button -->
+        <a class="ninja-btn" title="menu"><span></span></a>
+        <!-- Menu list -->
+  <ul>
+      
+    <li class="menu-label">Boomz</li>
+    <li class="active"><a onclick="window.location.href='index.html'">Categories</a></li>
+      <li class="active"><a onclick="window.location.href='offers-list.html'">Offers</a></li>
+      <li class="active" style="height:35px"><a onclick="window.location.href='quick.html'">Quick Links</a></li>
+ 
+     
+      <li class="active" style="height:35px"><a target="_blank" href="https://www.facebook.com/boomzbahrain"><i style="font-size:25px; color:#ededed" class="fa fa-facebook-square"></i> </a></li>
+      <li class="active"  style="height:35px"><a href="tel:17004879"><i style="font-size:25px; color:#ededed" class="fa fa-phone-square"></i></a></li>
+      <li class="active" style="height:35px"><a href="mailto:info@elandc.net" ><i style="font-size:25px; color:#ededed" class="fa fa-envelope"></i> </a></li>
+      <li class="active" style="height:35px"><a href="http://www.boomzbahrain.com" target="_blank"><i style="font-size:25px; color:#ededed" class="fa fa-globe"></i> </a></li>
+      
+
+      
+      <li class="active">elanDc Wll&#8482;<br>
+          Bahrain 
+
+      </li>
+      <li> <img src="images/logo.png" /></li>
+  </ul>
+    </div>
+
+
+
+    <div class="wrapper">
+
+
+        <div class="card" style="overflow:hidden;height:250px">
+            
+
+            
+         
+
+        </div>
+         
+
+        <div class="rating">
+           
+            <div class="rating-num">
+                <ons-icon icon="fa-star" fixed-width="false"></ons-icon>
+                <ons-icon icon="fa-star" fixed-width="false"></ons-icon>
+                <ons-icon icon="fa-star" fixed-width="false"></ons-icon>
+                <ons-icon icon="fa-star" fixed-width="false"></ons-icon>
+                <ons-icon icon="fa-star-half" fixed-width="false"></ons-icon>
+                4.5
+       
+            </div>
+         
+        </div>
+        
+           <div style="clear:both;" class="card-name"></div>
+
+        <ons-list class="detailsbar" style="border-top: none"><ons-list-item style="line-height: 1; padding: 0;">
+          <ons-row class="action">
+
+            <ons-col class="action-col">
+            <a onclick="javascript:window.location.href='rating.html?coid=' + querystring('profileid') + ''">
+              <div class="action-icon"><ons-icon icon="ion-ios7-star-half"></ons-icon></div>
+              <div class="action-label">Rate</div>
+              </a>
+            </ons-col>
+            
+            <ons-col class="action-col">
+              <div  class="mapx action-icon"><ons-icon icon="ion-location"></ons-icon></div>
+              <div id="map" class="action-label">Map</div>
+            </ons-col>
+
+            <ons-col class="action-col">
+              <a id="web" target="_blank"><div class="action-icon"><ons-icon icon="ion-earth"></ons-icon></div>
+              <div class="action-label">Web</div></a>
+            </ons-col>
+
+            
+
+            <ons-col class="action-col">
+              <a id="telep"><div class="action-icon"><ons-icon icon="ion-android-call"></ons-icon></div>
+              <div class="action-label">Call</div></a>
+            </ons-col>
+
+          </ons-row>
+        </ons-list-item></ons-list>
+
+        <div class="acc-container">
+            <div class="acc-btn">
+                <h1>About Us</h1>
+            </div>
+            <div class="acc-content">
+                <div class="acc-content-inner" id="aboutus">
+                     
+                </div>
+            </div>
+
+            <div class="acc-btn">
+                <h1>Products / Services</h1>
+            </div>
+            <div class="acc-content">
+                <div class="acc-content-inner" id="products">
+                      </div>
+            </div>
+
+            <div class="acc-btn">
+                <h1>Contact</h1>
+            </div>
+            <div class="acc-content">
+                <div class="acc-content-inner" id="location">
+                </div>
+            </div>
+
+
+        </div>
+        <!--end .accordion-->
+        <section id="reviews">
+            <div class="container">
+
+                <div class="row">
+                    <div class="col-md-10 col-md-push-1">
+                        <div id="reviewsx" class="review-filtering">
+                           
+                           
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="getApp">
+            <div class="container-fluid navbar-fixed-bottom getApp">
+
+
+                <div class="row">
+                    <div class="col-md-12">
+
+                <div class="platforms">
+                              <a href="offers-list.html" class="btn btn-primary pull-left inverse  sp-effect1 animated fadeInLeft">
+                                <i class="fa fa-gift fa-2x  m-right"></i>
+                            
+                                <b class="fa-23x">Offers</b>
+                            </a>
+                            
+                                <a href="quick.html" class="btn btn-primary pull-right inverse  sp-effect2 animated fadeInRight">
+                                    <i class="fa  fa-external-link fa-23x m-right"></i>
+                                    <b class="fa-23x">Quick Links</b>
+                                </a>
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+            </div>
+        </section>
+    </div>
+
+
+
+    <script src="js/accor.js"></script>
+    <script src="js/index.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+
+
+</body>
+</html>

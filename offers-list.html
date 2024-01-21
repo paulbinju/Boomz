@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+      <link rel="stylesheet" href="lib/onsen/css/onsenui.css">
+      <link rel="stylesheet" href="styles/onsen-css-components-blue-basic-theme.css">
+      <link rel="stylesheet" href="css/bootstrap.css">
+      <link rel="stylesheet" href="css/berry.css">
+      <link rel="stylesheet" href="css/animate.css">
+      <link rel="stylesheet" href="css/font-awesome.min.css">
+      <link rel="stylesheet" href="css/slick.css">
+      <link rel="stylesheet" href="js/rs-plugin/css/settings.css">
+
+      <link rel="stylesheet" href="style.css">
+      <link rel="stylesheet" href="css/style.css">
+
+
+
+      <script src="lib/onsen/js/angular/angular.js"></script>
+      <script src="lib/onsen/js/onsenui.js"></script>
+
+      <script src="js/jquery-1.11.1.min.js"></script>
+
+      <script type="text/javascript" src="js/modernizr.custom.32033.js"></script>
+     
+    <script>
+        ons.bootstrap();
+
+
+        var rowcontent = '';
+        $.getJSON('http://www.boomzbahrain.com/json/getoffersnew.ashx?secid=' + querystring('secid') + '&profileid=' + querystring('profileid') + '&callback=?', function (data) {
+            $.each(data, function (key, value) {
+                rowcontent = '<li class="product_item"><div class="product_sale"></div>';
+                rowcontent += '<div class="product_image"><a href="offers.html?profileid=' + data[key].CompanyID + '&secid"><img src="http://boomzbahrain.com/app/offers/' + data[key].OfferID + data[key].DocExtension + '" alt=""></a></div>';
+                rowcontent += '<div class="product_values"><div class="product_title"><h5>' + data[key].Title + '</h5></div>';
+                rowcontent += '<div class="product_price"><span class="price_old">' + ParseJsonDate(data[key].startdate) + '</span><span class="product_rating clear"></span></div>';
+                rowcontent += '<div class="product_desc"><p class="truncate clear">' + data[key].Details + '</p></div>';
+                rowcontent += '<div class="product_buttons"><button class="pink product_heart bottomp"><i class="fa fa-eye"></i><br style="clear:both"> <p>' + data[key].views + '</p></button><button  onclick=window.location.href="details.html?profileid=' + data[key].CompanyID + '"  class="green product_compare"><i style="font-size:1em;" class="fa fa-external-link"></i></button></a>';
+                rowcontent += '<button onclick=window.location.href="rating.html?coid=' + data[key].CompanyID + '" class="purple add_to_cart"><i class="fa fa-star"></i></button></div></div></li>';
+                $('#dataitems').append(rowcontent);
+            });
+            $('#loading').hide();
+
+        });
+
+
+        $.getJSON('http://www.boomzbahrain.com/json/getsections.ashx?1=2&callback=?', function (data) {
+
+            $.each(data, function (key, value) {
+                $('.submenu').append('<li><a href="offers-list.html?secid=' + data[key].SecID + '">' + data[key].Section + '</a></li>');
+            });
+
+        });
+
+
+
+
+        function querystring(key) {
+            var re = new RegExp('(?:\\?|&)' + key + '=(.*?)(?=&|$)', 'gi');
+            var r = [], m;
+            while ((m = re.exec(document.location.search)) != null) r.push(m[1]);
+            return r;
+        }
+
+        function ParseJsonDate(dateString) {
+            var milli = dateString.replace(/\/Date\((-?\d+)\)\//, '$1');
+            var date = new Date(parseInt(milli));
+            var date2 = String(date).substring(0, 16);
+            return date2;
+        }
+
+        $(".rthumbnail").delay(2000).fadeIn(1000);
+
+
+    </script>
+  </head>
+
+<body>
+        <ons-page>
+      <header class="hfixed wsub">
+<nav class="navbar" role="navigation">
+
+
+     <form action='search.html' id="searchform">
+                <label class='sr-only' for='q'>Search</label>
+                <input id='keyword' name='keyword' placeholder='Search Here' type='search'>
+                <button id="search" type='submit'>
+                    <span class='sr-only'>Search</span>
+                </button>
+            </form>
+
+
+            </nav>
+</header>
+   
+   
+    <div class="panel panel-white left">
+  <!-- Overlay div -->
+  <!-- Animated button -->
+  <a class="ninja-btn" title="menu" onclick="window.location.href='index.html'"><span></span></a>
+  <!-- Menu list -->
+  <ul>
+      
+    <li class="menu-label">Boomz</li>
+    <li class="active"><a onclick="window.location.href='index.html'">Categories</a></li>
+      <li class="active"><a onclick="window.location.href='offers-list.html'">Offers</a></li>
+      <li class="active" style="height:35px"><a onclick="window.location.href='quick.html'">Quick Links</a></li>
+ 
+     
+      <li class="active" style="height:35px"><a target="_blank" href="https://www.facebook.com/boomzbahrain"><i style="font-size:25px; color:#ededed" class="fa fa-facebook-square"></i> </a></li>
+      <li class="active"  style="height:35px"><a href="tel:17004879"><i style="font-size:25px; color:#ededed" class="fa fa-phone-square"></i></a></li>
+      <li class="active" style="height:35px"><a href="mailto:info@elandc.net" ><i style="font-size:25px; color:#ededed" class="fa fa-envelope"></i> </a></li>
+      <li class="active" style="height:35px"><a href="http://www.boomzbahrain.com" target="_blank"><i style="font-size:25px; color:#ededed" class="fa fa-globe"></i> </a></li>
+      
+
+      
+      <li class="active">elanDc Wll&#8482;<br>
+          Bahrain 
+
+      </li>
+      <li> <img src="images/logo.png" /></li>
+  </ul>
+</div>
+     
+
+
+            <section id="subcat">
+        
+
+	<ul id="subdown" class="subdown">
+		<li>
+			<div class="link"><i class="fa fa-plus-square"></i> Categories<i class="fa fa-chevron-down"></i></div>
+			<ul class="submenu">
+				 
+			</ul>
+		</li>
+	
+
+	
+	</ul>
+        </section>
+             <div class="wrapper">
+                    <link rel="stylesheet" href="css/style2.css">
+               
+<div class="product_grid">
+  <ul id="dataitems"  class="product_list list">
+
+ 
+
+     
+  </ul>
+</div>
+                 </div>
+   </ons-page>
+
+    <section id="getApp">
+            <div class="container-fluid navbar-fixed-bottom getApp">
+                
+                
+                <div class="row">
+                    <div class="col-md-12">
+                        
+                        <div class="platforms">
+                              <a href="offers-list.html" class="btn btn-primary pull-left inverse  sp-effect1 animated fadeInLeft">
+                                <i class="fa fa-gift fa-2x  m-right"></i>
+                            
+                                <b class="fa-23x">Offers</b>
+                            </a>
+                            
+                                <a href="quick.html" class="btn btn-primary pull-right inverse  sp-effect2 animated fadeInRight">
+                                    <i class="fa  fa-external-link fa-23x m-right"></i>
+                                    <b class="fa-23x">Quick Links</b>
+                                </a>
+                        </div>
+
+                    </div>
+                </div>
+
+                
+
+            </div>
+        </section>
+
+
+   <script src="js/index.js"></script>
+
+
+</body>
+
+</html>

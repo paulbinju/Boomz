@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <title>Boomz Bahrain</title>
+  <link rel="stylesheet" href="css/rating.css">
+        <link rel="stylesheet" href="css/style.css">
+     <link rel="stylesheet" href="css/berry.css">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    
+
+    <script src="js/prefixfree.min.js"></script>
+
+</head>
+
+<body class="rating">
+
+<header class="hfixed">
+<nav class="navbar" role="navigation">
+
+
+     <form action='search.html' id="searchform">
+                <label class='sr-only' for='q'>Search</label>
+                <input id='keyword' name='keyword' placeholder='Search Here' type='search'>
+                <button id="search" type='submit'>
+                    <span class='sr-only'>Search</span>
+                </button>
+            </form>
+
+
+            </nav>
+</header>
+   
+    <div class="panel panel-white left">
+  <!-- Overlay div -->
+  <!-- Animated button -->
+  <a class="ninja-btn" title="menu"><span></span></a>
+  <!-- Menu list -->
+  <ul>
+      
+    <li class="menu-label">Boomz</li>
+    <li class="active"><a onclick="window.location.href='index.html'">Categories</a></li>
+      <li class="active"><a onclick="window.location.href='offers-list.html'">Offers</a></li>
+      <li class="active" style="height:35px"><a onclick="window.location.href='quick.html'">Quick Links</a></li>
+ 
+     
+      <li class="active" style="height:35px"><a target="_blank" href="https://www.facebook.com/boomzbahrain"><i style="font-size:25px; color:#ededed" class="fa fa-facebook-square"></i> </a></li>
+      <li class="active"  style="height:35px"><a href="tel:17004879"><i style="font-size:25px; color:#ededed" class="fa fa-phone-square"></i></a></li>
+      <li class="active" style="height:35px"><a href="mailto:info@elandc.net" ><i style="font-size:25px; color:#ededed" class="fa fa-envelope"></i> </a></li>
+      <li class="active" style="height:35px"><a href="http://www.boomzbahrain.com" target="_blank"><i style="font-size:25px; color:#ededed" class="fa fa-globe"></i> </a></li>
+      
+
+      
+      <li class="active">elanDc Wll&#8482;<br>
+          Bahrain 
+
+      </li>
+      <li> <img src="images/logo.png" /></li>
+  </ul>
+</div>
+     
+
+
+    <div class="wrapper">
+
+<form id="ratingform">
+  <div class="input">
+    <label for="full-name">Full Name</label>
+    <input type="text" id="full-name" name="full-name" autocorrect="off" autocapitalize="words" maxlength="32">
+  </div>
+  <div class="input">
+    <label for="email">Email Address</label>
+    <input type="email" id="emailid" name="emailid" autocorrect="off" autocapitalize="off" maxlength="64">
+  </div>
+   <div class="input">
+    <label for="full-name">Review</label>
+    <input type="text" id="review" name="review" autocorrect="on" autocapitalize="words" maxlength="180">
+  </div>
+     <div class="input">
+	<div class="stars">
+		<input type="radio" name="star"  value="1" class="star-1" id="star-1" />
+		<label class="star-1" for="star-1">1</label>
+		<input type="radio" name="star"  value="2" class="star-2" id="star-2" />
+		<label class="star-2" for="star-2">2</label>
+		<input type="radio" name="star"  value="3" class="star-3" id="star-3" />
+		<label class="star-3" for="star-3">3</label>
+		<input type="radio" name="star" value="4" class="star-4" id="star-4" />
+		<label class="star-4" for="star-4">4</label>
+		<input type="radio" name="star" value="5" class="star-5" id="star-5" />
+		<label class="star-5" for="star-5">5</label>
+		<span></span>
+	</div>
+  <div id="starsubmit"><input type="button" value="Rate It"></input></div>
+  </div>
+
+  <input type="submit" id="submit" name="submit" value="Submit Review">
+</form>
+</div>
+  <script src="js/jquery-1.11.1.min.js"></script>
+  <script src="js/index.js"></script>
+
+
+    <script>
+
+ 
+
+        $('#ratingform').submit(function () {
+
+            
+
+            var postTo = 'http://www.boomzbahrain.com/json/addreview.ashx?companyid=' + querystring('coid') + '&name=' + $('[name=full-name]').val() + '&email=' + $('[name=emailid]').val() + '&rating=' + $('input[name=star]:checked').val() + '&review=' + $('[name=review]').val() + '&callback=?';
+
+            $.post(postTo, function (data) {
+                if (data != "") {
+                    $('#ratingform').html("<p style=margin-top:50px;>Thank you! you've successfully added review to the company.</p>")
+                } else {
+                    $('#ratingform').html("<p style=margin-top:50px;>Sorry! try after sometime.</p>")
+                }
+            }, 'json');
+            return false;
+
+            function querystring(key) {
+                var re = new RegExp('(?:\\?|&)' + key + '=(.*?)(?=&|$)', 'gi');
+                var r = [], m;
+                while ((m = re.exec(document.location.search)) != null) r.push(m[1]);
+                return r;
+            }
+        });
+
+    </script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,228 @@
+
+#ratingform .stars {
+  background: url("https://dl.dropboxusercontent.com/u/683504/www.codepen.io/stars.png") repeat-x 0 0;
+  width: 150px;
+  margin: 0 auto;
+margin-top:5px;
+margin-left: 5px;
+float:left;
+}
+.ie7 #ratingform .stars {
+  *zoom: 1;
+}
+.rating{
+	background:#fff;
+}
+#ratingform .stars:before,
+#ratingform .stars:after {
+  display: table;
+  content: "";
+}
+#ratingform .stars:after {
+  clear: both;
+}
+#ratingform .stars input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  filter: alpha(opacity=0);
+}
+#ratingform .stars input[type="radio"].star-5:checked ~ span {
+  width: 100%;
+}
+#ratingform .stars input[type="radio"].star-4:checked ~ span {
+  width: 80%;
+}
+#ratingform .stars input[type="radio"].star-3:checked ~ span {
+  width: 60%;
+}
+#ratingform .stars input[type="radio"].star-2:checked ~ span {
+  width: 40%;
+}
+#ratingform .stars input[type="radio"].star-1:checked ~ span {
+  width: 20%;
+}
+#ratingform .stars label {
+  display: block;
+  width: 30px;
+  height: 30px;
+  margin: 0!important;
+  padding: 0!important;
+  text-indent: -999em;
+  float: left;
+  position: relative;
+  z-index: 10;
+  background: transparent!important;
+  cursor: pointer;
+}
+#ratingform .stars label:hover ~ span {
+  background-position: 0 -30px;
+}
+#ratingform .stars label.star-5:hover ~ span {
+  width: 100% !important;
+}
+#ratingform .stars label.star-4:hover ~ span {
+  width: 80% !important;
+}
+#ratingform .stars label.star-3:hover ~ span {
+  width: 60% !important;
+}
+#ratingform .stars label.star-2:hover ~ span {
+  width: 40% !important;
+}
+#ratingform .stars label.star-1:hover ~ span {
+  width: 20% !important;
+}
+#ratingform .stars span {
+  display: block;
+  width: 0;
+  position: relative;
+  top: 0;
+  left: 0;
+  height: 30px;
+  background: url("https://dl.dropboxusercontent.com/u/683504/www.codepen.io/stars.png") repeat-x 0 -60px;
+  -webkit-transition: -webkit-width 0.5s;
+  -moz-transition: -moz-width 0.5s;
+  -ms-transition: -ms-width 0.5s;
+  -o-transition: -o-width 0.5s;
+  transition: width 0.5s;
+}
+#starsubmit {
+  width: 100%;
+margin: 0 auto;
+text-align: center;
+margin-top: 5px;
+}
+#starsubmit input[type=button] {
+  margin: 0 auto;
+  border: 2px solid #ddd;
+  border-radius: 15px;
+  background-color: #1aa3db;
+  color: #fff;
+}
+
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.clearfix:before,
+.clearfix:after {
+  content: "";
+  display: table;
+}
+.clearfix:after {
+  clear: both;
+}
+body, input {
+  font-family: 'Helvetica Neue', sans-serif;
+  font-size: 1em;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  color: #333;
+}
+input[type=text],
+input[type=email],
+input[type=password] {
+  border: 0;
+  margin: 0;
+  height: 40px;
+  padding: 0;
+  line-height: 30px;
+  font-size: 90%;
+  -webkit-transition: background-color .5s;
+  -moz-transition: background-color .5s;
+  transition: background-color .5s;
+}
+input:focus {
+  outline: none;
+}
+label {
+  width: 37.5%;
+  display: block;
+  float: left;
+  color: #999;
+  padding: 0 10px;
+  font-size: 70%;
+  text-transform: uppercase;
+  line-height: 40px;
+  white-space: nowrap;
+  -webkit-transition: all .5s;
+  -moz-transition: all .5s;
+  transition: all .5s;
+}
+.active label {
+  color: #333;
+}
+.input {
+  border: solid #ccc;
+  border-width: 0 1px 1px 1px;
+  -webkit-transition: background-color .5s;
+  -moz-transition: background-color .5s;
+  transition: background-color .5s;
+  overflow: hidden;
+}
+.input:first-of-type {
+  border-top: 1px solid #ccc;
+  border-radius: 6px 6px 0 0;
+}
+.input:last-of-type {
+  border-radius: 0 0 6px 6px;
+}
+.active, .active input {
+  background-color: #feffe8;
+}
+.input:hover label {
+  color: #333;
+}
+#ratingform {
+  display: block;
+max-width: 300px;
+margin: 0 auto;
+padding-top: 90px
+}
+.toggle-mask {
+  font-size: 70%;
+  color: #999;
+  text-transform: uppercase;
+  cursor: pointer;
+  line-height: 40px;
+  display: block;
+  width: 20%;
+  text-align: center;
+  float: right;
+}
+.toggle-mask:hover {
+  color: #0c4d6d;
+}
+input[type=submit] {
+  -webkit-appearance: none;
+  border: 0;
+  background-color: #89b555;
+  color: #fff;
+  border-radius: 6px;
+  display: block;
+  margin: 20px auto;
+  padding: 0 20px;
+  cursor: pointer;
+  font-size: 90%;
+  line-height: 40px;
+  text-shadow: 0 1px 1px rgba(0,0,0,.2);
+  font-weight: bold;
+  -webkit-transition: all .5s;
+  -moz-transition: all .5s;
+  transition: all .5s;
+}
+input[type=submit]:focus,
+input[type=submit]:hover {
+  background-color: #9bcc60;
+  text-shadow: 0 1px 1px rgba(0,0,0,.4);
+
+}
+#full-name, #email {
+  width: 62.5%;
+  display: block;
+}
+#password {
+  width: 42.5%;
+  float: left;
+}

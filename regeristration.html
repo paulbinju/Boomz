@@ -1,0 +1,252 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="js/jQMobile/jquery.mobile.icons.min.css" rel="stylesheet" />
+    <link href="js/jQMobile/mytheme.min.css" rel="stylesheet" />
+    <link href="js/jQMobile/jquery.mobile.icons.min.css" rel="stylesheet" />
+
+    <!--<link href="css/themes/default/mytheme.min.css" rel="stylesheet" />-->
+    <link href="js/jQMobile/jquery.mobile.structure-1.4.5.min.css" rel="stylesheet" />
+    <link href="js/jQMobile/style.css" rel="stylesheet" />
+    <script src="js/jquery-1.11.1.min.js"></script>
+    <script src="js/jQMobile/jquery.mobile-1.4.5.min.js"></script>
+
+    <script src="js/cordova.js"></script>
+
+    <script src="js/PushNotification.js"></script>
+    <script src="js/myhelper.js"></script>
+    <style>
+        .symbol {
+            font-size: 0.9em;
+            font-family: Times New Roman;
+            border-radius: 1em;
+            padding: .1em .6em .1em .6em;
+            font-weight: bolder;
+            color: white;
+            background-color: #4E5A56;
+        }
+
+        .notify-red {
+            background: #ffecec;
+            border-color: #fad9d7;
+        }
+
+        .notify {
+            background-color: #ffecec;
+            color: #f00;
+            border: .1em solid;
+            border-color: #fad9d7;
+            border-radius: 10px;
+            font-family: Tahoma,Geneva,Arial,sans-serif;
+            font-size: 1.1em;
+            padding: 10px 10px 10px 10px;
+            margin: 10px;
+            cursor: default;
+        }
+
+        .padding5pxbold {
+            font-size: 1.1em;
+            margin-top: 10px;
+            color: red;
+        }
+
+        .ui-focus {
+            -moz-box-shadow: none !important;
+            -webkit-box-shadow: none !important;
+            box-shadow: none !important;
+        }
+
+        .slide.in {
+            -webkit-transform: translateX(0);
+            -webkit-animation-name: slideinfromright;
+            -webkit-animation-timing-function: ease-in-out;
+            -webkit-animation-duration: 1000ms;
+        }
+
+        .bottombarButton {
+            position: absolute;
+            right: 35px;
+            bottom: 0px;
+        }
+
+        .mytitle {
+            display: inline-block!important;
+            white-space: pre-line!important;
+        }
+    </style>
+    <script>
+        function onOffline() {
+            checkConnection();
+        }
+        function go_back() {
+        }
+
+
+        function onDeviceReady() {
+
+            document.addEventListener("offline", onOffline, false);
+            document.addEventListener("backbutton", go_back, false);
+
+            
+            try {
+                pushNotification = window.plugins.pushNotification;
+                
+                if (device.platform == 'android' || device.platform == 'Android') {
+                    localStorage.setItem('email', $.trim($('#txtEmail').val()));
+                    pushNotification.register(successHandler, errorHandler, { "senderID": "618158074930", "ecb": "onNotificationGCM" }); 	// required!
+                }
+
+            }
+            catch (err) {
+                var txt = '';
+                txt = "There was an error on this page.\n\n";
+                txt += "Error description: " + err.message + "\n\n";
+                alert("error" + JSON.stringify(err));
+            }
+
+        }
+
+
+
+        $(document).ready(function () {
+            document.addEventListener('deviceready', onDeviceReady, false);
+
+            if (localStorage.getItem("isRegistered")) {
+                window.location = "index.html";
+            };
+        });
+
+        function registerGCM() {
+            // AddUserGCM();
+            if ($('#txtEmail').val() != "") {
+                if (validateEmail()) {
+                    AddUserGCM()
+                } else {
+                    alert("Please Enter Valid Email");
+                }
+            } else {
+                alert("Please Enter Email Address");
+            }
+        }
+
+        function validateEmail() {
+            var email = $('#txtEmail').val();
+            if (email != "") {
+                var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+                return re.test(email)
+            }
+            //} else {
+            //    
+            //    return false;
+
+            //}
+        }
+
+
+        function AddUserGCM() {
+
+            var reg = new Registration();
+            reg.EmailAddress = $.trim($('#txtEmail').val());
+            reg.GCMID = localStorage.getItem('regid');;
+            reg.Type = device.platform;
+            reg.Key = "B@@MZ_KEY";
+
+            localStorage.setItem('regid', "")
+
+            if (reg.GCMID != "") {
+                var email = localStorage.getItem('email');
+                request = JSON.stringify(reg);
+                //alert(request);
+                $.ajax({
+                    beforeSend: function (xhr) {
+                        ShowLoading('Please wait...');
+                        //xhr.setRequestHeader("SOAPAction", SoapAction + "IService/SignIn");
+                    }, //Show spinner
+                    complete: function () {
+                        HideLoading();
+                    }, //Hide spinner
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    url: "http://www.boomzbahrain.com/boomzwebservice.asmx/AddUserGCM",
+                    data: request,//'{"test":"' + test + '"}',
+                    dataType: "json",
+                    success: function (data) {
+                        //alert("success");
+                        if (data.d.split("|")[0] == "true") {
+                            //alert(data.d.split("|")[0]);
+                            localStorage.setItem("isRegistered", "true");
+                            window.location = "index.html";
+                        }
+                    },
+                    error: function (error) {
+                        alert("Error Occured");
+                        //alert(JSON.stringify(error));
+                    }
+                });
+
+            }
+
+        }
+
+        //function aAddUserGCM() {
+        //    var test = "Hello World";
+        //    test = JSON.stringify(test:)
+        //    alert(test);
+
+        //    $.ajax({
+        //        beforeSend: function (xhr) {
+        //            //ShowLoading('Please wait...');
+        //            //xhr.setRequestHeader("SOAPAction", SoapAction + "IService/SignIn");
+        //        }, //Show spinner
+        //        complete: function () {
+        //            HideLoading();
+        //        }, //Hide spinner
+        //        type: "POST",
+        //        contentType: "application/json; charset=utf-8",
+        //        url: "http://localhost:4020/BoomzWebService.asmx/HelloWorld",
+        //        data: test,//'{"test":"' + test + '"}',
+        //        dataType: "json",
+        //        success: function (data) {
+        //            alert("success");
+        //            alert(JSON.stringify(data));
+        //        },
+        //        error: function (error) {
+        //            alert("error");
+        //            alert(JSON.stringify(error));
+        //        }
+        //    });
+
+
+
+        //      }
+        function onExit() {
+            navigator.app.exitApp();
+        }
+
+    </script>
+</head>
+
+<body>
+    <div data-role="page">
+        <div data-role="header" data-position="fixed">
+            <h1>Registration</h1>
+        </div>
+        <div data-role="content">
+            <div class="ui-field-contain">
+                <label for="txtEmail">Email:</label>
+                <input type="email" name="txtEmail" id="txtEmail" placeholder="Email">
+            </div>
+            <a href="#" id="btnRegister" onclick="registerGCM();return false;" class="ui-btn">Register</a>
+        </div>
+        <div data-role="footer" data-position="fixed" class="ui-bar">
+            <h4>HD Apps</h4>
+        </div>
+    </div>
+
+
+</body>
+</html>
